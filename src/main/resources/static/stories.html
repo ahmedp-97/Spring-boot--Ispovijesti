@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stories</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="header"></div>
+<div class="container">
+    <div class="container" id="stories">
+
+    </div>
+</div>
+
+<div class="modal fade" id="confimDeletion" tabindex="-1" role="dialog" aria-labelledby="confirmDeletion" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Izbrisi Pricu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteBook()">Izbrisi</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function loadTable(){
+    console.log("test");
+    $.ajax({
+        type: 'GET',
+        url: '/api/story',
+        data: {
+            format: 'json'
+        },
+        error: function() {
+            var $error = $('<h1>').text('An error has occurred');
+            $('#stories').append($error);
+        },
+        dataType: 'json',
+        success: function(data) {
+            $('#stories').empty();
+            data.forEach(element => {"
+                var div = $('<div></div>').addClass =('card');
+                var autor = $('<div></div>').addClass =('card-header');
+                var body = $('<div></div>').addClass =('card-body');
+                var naslov = $('<h5></h5>').addClass =('card-title');
+                var sadrzaj = $('<p></p>').addClass =('card-text');
+
+                div.append(div);
+                div.append(autor);
+                div.append(body);
+                div.append(naslov);
+                div.append(sadrzaj);
+
+                $('#stories').append(div);
+            });
+
+        }
+    });
+}
+function showDeleteBookDialog(id){
+    $("#confimDeletion").modal("show");
+    selectedBook = id;
+}
+function deleteBook(){
+    console.log("delete : " + selectedBook);
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/story/'+selectedBook,
+        error: function() {
+            var $error = $('<h1>').text('An error has occurred');
+            $('#stories').append($error);
+        },
+        success: function(data) {
+            loadTable();
+        }
+    });
+}
+$(document).ready(function(){
+     $("#header").load("components/header.html");
+});
+$(document).ready(function(){
+    loadTable();
+});
+</script>
+</body>
+</html>

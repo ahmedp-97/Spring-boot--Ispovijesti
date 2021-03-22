@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark text-white">
+    <div class="container">
+        <a class="navbar-brand" href="/">Ispricaj Svoju Pricu</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/all">Priče</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-toggle="modal" data-target="#add-story">Podijeli Priču</a>
+            </li>
+            <li class="nav-item">
+                <a href="/"  class="btn btn-warning">Admin</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="modal fade" id="add-story" tabindex="-1" role="dialog" aria-labelledby="addStoryModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-story-title">Add Story</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="form-group">
+                        <label for="autor">Autor</label>
+                        <input name= "autor" type="text" class="form-control" placeholder="Autor(opciono)" id="autor">
+                    </div>
+                    <div class="form-group">
+                        <label for="naslov">Naslov</label>
+                        <input name= "naslov" type="text" class="form-control" placeholder="Naslov" id="naslov">
+                    </div>
+                    <div class="form-group">
+                        <label for="sadrzaj">Sadrzaj</label>
+                        <textarea name= "sadrzaj"  class="form-control" placeholder="Sadrzaj" id="sadrzaj"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                <button id="add-story-button" type="button" class="btn btn-primary" data-dismiss="modal">Podijeli priču</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("#add-story-button").click(function(){
+            var story = {
+                        autor: $("#autor").val(),
+                        naslov: $("#naslov").val(),
+                        sadrzaj: $("#sadrzaj").val()};
+            $.ajax({
+                type: 'POST',
+                url: '/api/story',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(story),
+                error: function() {
+                    var $error = $('<h1>').text('An error has occurred');
+                    $('body').append($error);
+                },
+                success: function(data) {
+                    console.log("added story");
+                    $("#autor").val("");
+                    $("#naslov").val("");
+                    $('#sadrzaj').val("");
+                    loadTable();
+                }
+            });
+        });
+    });
+</script>

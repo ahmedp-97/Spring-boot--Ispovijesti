@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+    var selectedBook;
+</script>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="header"></div>
+<div class="container">
+    <div class="jumbotron jumbotron-fluid mt-md-2">
+        <div class="container">
+
+
+            </div>
+        </div>
+    </div>
+    <div id="info-message" class="container">
+
+    </div>
+    <div class="container" id="books" style="display:none">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Autor</th>
+                <th>Naslov</th>
+                <th>Sadrzaj</th>
+                <th>Rent</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+function loadTable(){
+    if($("#search-input").val() != ""){
+        $.ajax({
+            type: 'GET',
+            url: '/api/story/search',
+            data: {
+                keyword: $("#search-input").val()
+            },
+            success: function(data) {
+                $('#table-body').empty();
+                if(data.length == 0){
+                    var message = $("<div class='alert alert-info'></div>").text("There is no book for the given keywords");
+                    $("#info-message").empty();
+                    $("#books").hide();
+                    $("#info-message").append(message);
+                }
+                else{
+                    data.forEach(element => {
+                        var tr = $('<tr></tr>');
+                        var autor = $('<td></td>').text(element.autor);
+                        var naslov = $('<td></td>').text(element.naslov);
+                        var sadrzaj = $('<td></td>').text(element.sadrzaj);
+                        var rentRow = $('<td></td>');
+
+                        tr.append(autor);
+                        tr.append(naslov);
+                        tr.append(sadrzaj);
+                        tr.append(rentRow);
+                        $('#table-body').append(tr);
+                    });
+                    $("#info-message").empty();
+                    $("#books").slideDown();
+                }
+            }
+        });
+    }
+}
+
+function rentBook(id){
+    console.log("rent book: " + id);
+    $.ajax({
+            type: 'PUT',
+            url: '/api/story/rent/' + id,
+            success: function(data) {
+                loadTable();
+            }
+        });
+}
+$(document).ready(function(){
+     $("#header").load("components/header.html");
+     $("#stories").slideUp();
+});
+$(document).ready(function(){
+    $("#search-button").click(function(){
+        loadTable();
+    });
+});
+</script>
+</body>
+</html>
