@@ -1,43 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Stories</title>
+    <style>
+#myBody{
+	background-color: #DDDDDD;
+}
+
+.card{
+    width: 60%;
+    padding: 15px;
+    margin: 10px auto;
+    display: block;
+    border: 1px solid;
+    border-radius: 15px;
+}
+
+.card-text{
+  height: 53px;
+  border-radius: 15px;
+  margin-bottom: auto;
+  border: none;
+  font-style: oblique;
+  padding:10px;
+  overflow: hidden;
+}
+
+.card-title{
+  margin-bottom: auto;
+  border-bottom: 1px solid;
+  font-style: oblique;
+  padding:10px;
+  font-weight: bold;
+}
+
+.card-body{
+  font-size: 15px;
+  background-color: #ffc107;
+  border: 1px solid;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+#navbar-brandID{
+    color: black;
+    font-size: 35px;
+    font-weight: bold;
+    padding-top: 25px;
+    font-family: "Lucida Handwriting", Cursive;
+    text-shadow: 1px 1px 3px #A9A9A9;
+    font-style: oblique;
+}
+#mainNavBar{
+    height: 70px;
+    background-color: black;
+}
+#story-sadrzaj{
+height: 200px;
+}
+#btnLink{
+float: right;
+}
+#modal-contentID{
+color: white;
+background-color: #2F4F4F;
+}
+    </style>
+
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body id="myBody">
 <div id="header"></div>
-<div class="container">
-    <div class="container" id="stories">
-
+            <br>
+                 <div class="container" id="stories">
+            <br>
     </div>
-</div>
-
-<div class="modal fade" id="confimDeletion" tabindex="-1" role="dialog" aria-labelledby="confirmDeletion" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="addStoryModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="modal-contentID">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Izbrisi Pricu</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="story-title"></h5>
             </div>
             <div class="modal-body">
-                Are you sure?
+                <div class="container">
+                    <label>Autor:</label>
+                    <div class="form-group" id="story-autor"></div>
+                    <label>Sadržaj:</label>
+                    <div class="form-group" id="story-sadrzaj"></div>
+                    <br>
+                    <div class="form-group">
+                        <p id="date"></p>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Odobravam</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Osuđujem</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteBook()">Izbrisi</button>
             </div>
         </div>
     </div>
 </div>
+
 <script>
+var n =  new Date();
+var y = n.getFullYear();
+var m = n.getMonth() + 1;
+var d = n.getDate();
+document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
+
 function loadTable(){
-    console.log("test");
     $.ajax({
         type: 'GET',
         url: '/api/story',
@@ -51,18 +131,22 @@ function loadTable(){
         dataType: 'json',
         success: function(data) {
             $('#stories').empty();
-            data.forEach(element => {"
-                var div = $('<div></div>').addClass =('card');
-                var autor = $('<div></div>').addClass =('card-header');
-                var body = $('<div></div>').addClass =('card-body');
-                var naslov = $('<h5></h5>').addClass =('card-title');
-                var sadrzaj = $('<p></p>').addClass =('card-text');
+            data.forEach(element => {
+                var div = $('<div></div>').addClass('card');
+                var autor = $('<div></div>').addClass('card-body').text(element.autor);
+                var naslov = $('<div></div>').addClass('card-title').text(element.naslov);
+                var sadrzaj = $('<div></div>').addClass('card-text').text(element.sadrzaj);
+                var readMore = $('<div></div>');
+                var readMoreButton = $("<button type='button' id='btnLink' class='btn btn-link' onclick ='getStory("+element.id+")'>Pročitaj više</button>");
+
+                readMore.append(readMoreButton);
 
                 div.append(div);
                 div.append(autor);
-                div.append(body);
                 div.append(naslov);
                 div.append(sadrzaj);
+                div.append(readMore);
+
 
                 $('#stories').append(div);
             });
@@ -70,21 +154,63 @@ function loadTable(){
         }
     });
 }
-function showDeleteBookDialog(id){
-    $("#confimDeletion").modal("show");
-    selectedBook = id;
-}
-function deleteBook(){
-    console.log("delete : " + selectedBook);
+
+function getStory(id){
+    selectedStory = id;
+    console.log("getStory : " + id);
     $.ajax({
-        type: 'DELETE',
-        url: '/api/story/'+selectedBook,
+        type: 'GET',
+        url: '/api/story/ '+ id,
         error: function() {
             var $error = $('<h1>').text('An error has occurred');
             $('#stories').append($error);
         },
         success: function(data) {
-            loadTable();
+        console.log("test")
+            $('#story-title').text(data.naslov)
+            $('#story-autor').text(data.autor)
+            $('#story-sadrzaj').text(data.sadrzaj)
+            $('#button-like').data('story-id', data.id)
+            $('#myModal').modal('show')
+
+        }
+    });
+}
+    function odobravam(id){
+    selectedStory = id;
+    console.log("putOdobravam : " + id);
+    $.ajax({
+        type: 'PUT',
+        url: '/api/story/odobravam/ '+ data('story-id', data.id),
+        error: function() {
+            var $error = $('<h1>').text('An error has occurred');
+            $('#stories').append($error);
+        },
+        success: function(data) {
+        console.log("test")
+
+            $('#button-like').data('story-id')
+            $('#myModal').modal('show')
+
+        }
+    });
+}
+function osudjujem(id){
+    selectedStory = id;
+    console.log("putOsudjujem : " + id);
+    $.ajax({
+        type: 'PUT',
+        url: '/api/story/osudjujem/ '+ id,
+        error: function() {
+            var $error = $('<h1>').text('An error has occurred');
+            $('#stories').append($error);
+        },
+        success: function(data) {
+        debugger
+        console.log("test")
+
+            $('#myModal').modal('show')
+
         }
     });
 }

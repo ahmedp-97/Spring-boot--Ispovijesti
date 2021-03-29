@@ -1,9 +1,6 @@
 package Project.finalProject.Price;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 
@@ -16,22 +13,33 @@ public class Story {
     private Long id;
     private String autor;
     private String naslov;
+    @Lob
     private String sadrzaj;
+    private Integer odobravam;
+    private Integer osudjujem;
+
+
 
     public Story() {
     }
 
-    public Story(Long id, String autor, String naslov, String sadrzaj) {
+    public Story(Long id, String autor, String naslov, String sadrzaj, Integer osudjujem, Integer odobravam) {
         this.id = id;
         this.autor = autor;
         this.naslov = naslov;
         this.sadrzaj = sadrzaj;
+        this.odobravam = odobravam;
+        this.osudjujem = osudjujem;
+
     }
 
-    public Story(String autor, String naslov, String sadrzaj) {
+    public Story(String autor, String naslov, String sadrzaj, Integer osudjujem, Integer odobravam) {
         this.autor = autor;
         this.naslov = naslov;
         this.sadrzaj = sadrzaj;
+        this.odobravam = odobravam;
+        this.osudjujem = osudjujem;
+
     }
 
     public Long getId() {
@@ -66,6 +74,22 @@ public class Story {
         this.sadrzaj = sadrzaj;
     }
 
+    public Integer getOdobravam() {
+        return odobravam;
+    }
+
+    public void setOdobravam(Integer odobravam) {
+        this.odobravam = odobravam;
+    }
+
+    public Integer getOsudjujem() {
+        return osudjujem;
+    }
+
+    public void setOsudjujem(Integer osudjujem) {
+        this.osudjujem = osudjujem;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,7 +108,7 @@ public class Story {
 
     @Override
     public String toString() {
-        return "Price{" +
+        return "Story{" +
                 "id=" + id +
                 ", autor='" + autor + '\'' +
                 ", naslov='" + naslov + '\'' +

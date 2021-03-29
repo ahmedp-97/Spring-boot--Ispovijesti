@@ -1,6 +1,39 @@
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark text-white">
+<style>
+#navbar-brandID{
+    color: 	black;
+    font-size: 35px;
+    font-weight: bold;
+    padding-top: 25px;
+    font-family: "Lucida Handwriting", Cursive;
+    text-shadow: 1px 1px 3px #A9A9A9;
+    font-style: oblique;
+}
+#paragraf1{
+	margin: 30px;
+	font-size: 50px;
+	color: black;
+	font-weight: bold;
+	font-family: "Lucida Handwriting", Cursive;
+	text-align: center;
+	font-style: oblique;
+}
+    #paragraf2{
+	margin: 40px;
+	font-size: 15px;
+	color: black;
+	font-family: "Lucida Handwriting", Cursive;
+	font-weight: bold;
+	text-align: center;
+	font-style: oblique;
+}
+#mainNavBar{
+    height: 70px;
+}
+
+</style>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark text-white" id="mainNavBar">
     <div class="container">
-        <a class="navbar-brand" href="/">Ispricaj Svoju Pricu</a>
+        <a class="navbar-brand" id="navbar-brandID" href="/">Ispričaj Svoju Priču</a>
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" href="/all">Priče</a>
@@ -9,7 +42,7 @@
                 <a href="#" class="nav-link" data-toggle="modal" data-target="#add-story">Podijeli Priču</a>
             </li>
             <li class="nav-item">
-                <a href="/"  class="btn btn-warning">Admin</a>
+                <a href="/admin"  class="btn btn-warning">Admin</a>
             </li>
         </ul>
     </div>
@@ -19,7 +52,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-story-title">Add Story</h5>
+                <h5 class="modal-title" id="add-story-title">Dodaj Priču</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -35,8 +68,8 @@
                         <input name= "naslov" type="text" class="form-control" placeholder="Naslov" id="naslov">
                     </div>
                     <div class="form-group">
-                        <label for="sadrzaj">Sadrzaj</label>
-                        <textarea name= "sadrzaj"  class="form-control" placeholder="Sadrzaj" id="sadrzaj"></textarea>
+                        <label for="sadrzaj">Sadržaj</label>
+                        <textarea class="form-control" placeholder="Sadržaj" id="sadrzaj"></textarea>
                     </div>
                 </div>
             </div>
