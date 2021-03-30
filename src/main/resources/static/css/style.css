@@ -1,0 +1,91 @@
+#myBody{
+	background-color: #DDDDDD;
+}
+
+#paragraf1{
+	margin: 30px;
+	font-size: 50px;
+	color: black;
+	font-weight: bold;
+	font-family: "Lucida Handwriting", Cursive;
+	text-align: center;
+	font-style: oblique;
+}
+#paragraf2{
+	margin: 40px;
+	font-size: 15px;
+	color: black;
+	font-family: "Lucida Handwriting", Cursive;
+	font-weight: bold;
+	text-align: center;
+	font-style: oblique;
+}
+.card{
+    width: 60%;
+    padding: 40px;
+    margin: 10px auto;
+    display: block;
+    border: 1px solid;
+    border-radius: 15px;
+}
+
+.card-text{
+  height: 53px;
+  border-radius: 15px;
+  margin-bottom: auto;
+  border: none;
+  font-style: oblique;
+  padding:10px;
+  overflow: hidden;
+}
+
+.card-title{
+  margin-bottom: auto;
+  border-bottom: 1px solid;
+  font-style: oblique;
+  padding:10px;
+  font-weight: bold;
+}
+
+.card-body{
+  font-size: 15px;
+  background-color: #ffc107;
+  border: 1px solid;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+#navbar-brandID{
+    color: black;
+    font-size: 35px;
+    font-weight: bold;
+    padding-top: 25px;
+    font-family: "Lucida Handwriting", Cursive;
+    text-shadow: 1px 1px 3px #A9A9A9;
+    font-style: oblique;
+}
+#mainNavBar{
+    height: 70px;
+    background-color: black;
+}
+
+#story-sadrzaj{
+    height: 200px;
+}
+
+#btnLink{
+    float: right;
+}
+
+#modal-contentID{
+    color: white;
+    background-color: #2F4F4F;
+}
+
+#delBtn{
+    float: right;
+}
+#like-count{
+font-weight: bold;
+}

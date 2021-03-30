@@ -1,4 +1,4 @@
-package Project.finalProject.Price;
+package Project.finalProject.Stories;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,33 +31,36 @@ public class StoryController {
     public Story addStory(@RequestBody Story story) {
         return storyRepository.save(story);
     }
+
     @PutMapping("/odobravam/{id}")
-    public void odobravam(@PathVariable("id") Long id){
-        Story story = storyRepository.getOne(id);
-        if(story == null){
-            throw new StoryNotFoundException(id);
+    public Story odobravam(@PathVariable("id") Long id) {
+        Story story = storyRepository.findById(id)
+                .orElseThrow(() -> new StoryNotFoundException(id));
+
+        int like = story.getOdobravam();
+        if (like > 0) {
+            story.setOdobravam(like + 1);
+        } else {
+            story.setOdobravam(1);
         }
-        else{
-            int like = story.getOdobravam();
-            if(like > 0){
-                story.setOdobravam(like+1);
-            }
-            storyRepository.save(story);
-        }
+        storyRepository.save(story);
+
+        return story;
     }
     @PutMapping("/osudjujem/{id}")
-    public void osudjujem(@PathVariable("id") Long id){
-        Story story = storyRepository.getOne(id);
-        if(story == null){
-            throw new StoryNotFoundException(id);
+    public Story osudjujem(@PathVariable("id") Long id){
+        Story story = storyRepository.findById(id)
+                .orElseThrow(() -> new StoryNotFoundException(id));
+
+        int dislike = story.getOsudjujem();
+        if (dislike > 0) {
+            story.setOsudjujem(dislike + 1);
+        } else {
+            story.setOsudjujem(1);
         }
-        else{
-            int dislike = story.getOsudjujem();
-            if(dislike > 0){
-                story.setOsudjujem(dislike+1);
-            }
-            storyRepository.save(story);
-        }
+        storyRepository.save(story);
+
+        return story;
     }
 
     @DeleteMapping("/{id}")

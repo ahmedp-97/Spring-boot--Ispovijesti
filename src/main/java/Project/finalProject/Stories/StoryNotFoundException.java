@@ -1,4 +1,4 @@
-package Project.finalProject.Price;
+package Project.finalProject.Stories;
 
 public class StoryNotFoundException extends RuntimeException{
     public StoryNotFoundException(Long id){

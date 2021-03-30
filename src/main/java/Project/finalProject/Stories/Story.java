@@ -1,4 +1,4 @@
-package Project.finalProject.Price;
+package Project.finalProject.Stories;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -75,7 +75,12 @@ public class Story {
     }
 
     public Integer getOdobravam() {
-        return odobravam;
+        if (odobravam == null) {
+            return 0;
+        } else {
+            return odobravam;
+        }
+
     }
 
     public void setOdobravam(Integer odobravam) {
@@ -83,7 +88,11 @@ public class Story {
     }
 
     public Integer getOsudjujem() {
-        return osudjujem;
+        if (osudjujem == null) {
+            return 0;
+        } else {
+            return osudjujem;
+        }
     }
 
     public void setOsudjujem(Integer osudjujem) {
@@ -103,7 +112,7 @@ public class Story {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, autor, naslov, sadrzaj);
+        return Objects.hash(id, autor, naslov, sadrzaj, odobravam, osudjujem);
     }
 
     @Override

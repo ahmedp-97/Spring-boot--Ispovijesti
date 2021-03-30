@@ -3,77 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Stories</title>
-    <style>
-#myBody{
-	background-color: #DDDDDD;
-}
-
-.card{
-    width: 60%;
-    padding: 15px;
-    margin: 10px auto;
-    display: block;
-    border: 1px solid;
-    border-radius: 15px;
-}
-
-.card-text{
-  height: 53px;
-  border-radius: 15px;
-  margin-bottom: auto;
-  border: none;
-  font-style: oblique;
-  padding:10px;
-  overflow: hidden;
-}
-
-.card-title{
-  margin-bottom: auto;
-  border-bottom: 1px solid;
-  font-style: oblique;
-  padding:10px;
-  font-weight: bold;
-}
-
-.card-body{
-  font-size: 15px;
-  background-color: #ffc107;
-  border: 1px solid;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-}
-
-#navbar-brandID{
-    color: black;
-    font-size: 35px;
-    font-weight: bold;
-    padding-top: 25px;
-    font-family: "Lucida Handwriting", Cursive;
-    text-shadow: 1px 1px 3px #A9A9A9;
-    font-style: oblique;
-}
-#mainNavBar{
-    height: 70px;
-    background-color: black;
-}
-#story-sadrzaj{
-height: 200px;
-}
-#btnLink{
-float: right;
-}
-#modal-contentID{
-color: white;
-background-color: #2F4F4F;
-}
-    </style>
-
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="myBody">
 <div id="header"></div>
@@ -98,8 +33,12 @@ background-color: #2F4F4F;
                         <p id="date"></p>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Odobravam</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Osuđujem</button>
+                        <button id="like-story" type="button" class="btn btn-success" onclick="odobravam()">
+                            Odobravam <span id="like-count"> 0 </span>
+                        </button>
+                        <button id="dislike-story" type="button" class="btn btn-danger" onclick="osudjujem()">
+                            Osuđujem <span id="dislike-count"> 0 </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -110,116 +49,6 @@ background-color: #2F4F4F;
     </div>
 </div>
 
-<script>
-var n =  new Date();
-var y = n.getFullYear();
-var m = n.getMonth() + 1;
-var d = n.getDate();
-document.getElementById("date").innerHTML = d + "/" + m + "/" + y;
-
-function loadTable(){
-    $.ajax({
-        type: 'GET',
-        url: '/api/story',
-        data: {
-            format: 'json'
-        },
-        error: function() {
-            var $error = $('<h1>').text('An error has occurred');
-            $('#stories').append($error);
-        },
-        dataType: 'json',
-        success: function(data) {
-            $('#stories').empty();
-            data.forEach(element => {
-                var div = $('<div></div>').addClass('card');
-                var autor = $('<div></div>').addClass('card-body').text(element.autor);
-                var naslov = $('<div></div>').addClass('card-title').text(element.naslov);
-                var sadrzaj = $('<div></div>').addClass('card-text').text(element.sadrzaj);
-                var readMore = $('<div></div>');
-                var readMoreButton = $("<button type='button' id='btnLink' class='btn btn-link' onclick ='getStory("+element.id+")'>Pročitaj više</button>");
-
-                readMore.append(readMoreButton);
-
-                div.append(div);
-                div.append(autor);
-                div.append(naslov);
-                div.append(sadrzaj);
-                div.append(readMore);
-
-
-                $('#stories').append(div);
-            });
-
-        }
-    });
-}
-
-function getStory(id){
-    selectedStory = id;
-    console.log("getStory : " + id);
-    $.ajax({
-        type: 'GET',
-        url: '/api/story/ '+ id,
-        error: function() {
-            var $error = $('<h1>').text('An error has occurred');
-            $('#stories').append($error);
-        },
-        success: function(data) {
-        console.log("test")
-            $('#story-title').text(data.naslov)
-            $('#story-autor').text(data.autor)
-            $('#story-sadrzaj').text(data.sadrzaj)
-            $('#button-like').data('story-id', data.id)
-            $('#myModal').modal('show')
-
-        }
-    });
-}
-    function odobravam(id){
-    selectedStory = id;
-    console.log("putOdobravam : " + id);
-    $.ajax({
-        type: 'PUT',
-        url: '/api/story/odobravam/ '+ data('story-id', data.id),
-        error: function() {
-            var $error = $('<h1>').text('An error has occurred');
-            $('#stories').append($error);
-        },
-        success: function(data) {
-        console.log("test")
-
-            $('#button-like').data('story-id')
-            $('#myModal').modal('show')
-
-        }
-    });
-}
-function osudjujem(id){
-    selectedStory = id;
-    console.log("putOsudjujem : " + id);
-    $.ajax({
-        type: 'PUT',
-        url: '/api/story/osudjujem/ '+ id,
-        error: function() {
-            var $error = $('<h1>').text('An error has occurred');
-            $('#stories').append($error);
-        },
-        success: function(data) {
-        debugger
-        console.log("test")
-
-            $('#myModal').modal('show')
-
-        }
-    });
-}
-$(document).ready(function(){
-     $("#header").load("components/header.html");
-});
-$(document).ready(function(){
-    loadTable();
-});
-</script>
+<script src="js/stories.js" > </script>
 </body>
 </html>
